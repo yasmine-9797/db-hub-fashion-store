@@ -25,8 +25,8 @@ export function useScrollAnimations() {
     );
     const scan = () => {
       document.querySelectorAll<HTMLElement>(SELECTOR).forEach((el) => {
-        if (el.dataset.sa || el.closest(".card-3d") || el.closest("[role=dialog]")) return;
-        el.dataset.sa = "1";
+        if (el.dataset["sa"] || el.closest(".card-3d") || el.closest("[role=dialog]")) return;
+        el.dataset["sa"] = "1";
         const kind = el.tagName === "IMG" ? "sa-zoom" : el.tagName === "H2" ? "sa-title" : "sa-up";
         el.classList.add("sa", kind);
         const sibs = el.parentElement ? Array.from(el.parentElement.children) : [];
