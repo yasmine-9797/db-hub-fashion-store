@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight, Instagram, MapPin, Phone } from "lucide-react";
 import hero from "@/assets/hero.jpg";
+import storyImg from "@/assets/cat-imported.jpg";
 import { Header, Logo } from "@/components/store/Header";
 import { Shop } from "@/components/store/Shop";
 import { EnquiryForm } from "@/components/store/EnquiryForm";
@@ -102,7 +103,7 @@ function Index() {
 
         {/* STORY */}
         <section aria-labelledby="story-title" className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-28 md:grid-cols-12 lg:px-10">
-          <img src={GALLERY[4]} alt="Washed denim jacket" loading="lazy" width={768} height={1024} className="aspect-[4/5] w-full object-cover md:col-span-5" />
+          <img src={storyImg} alt="Folded imported knitwear and denim" loading="lazy" width={768} height={1024} className="aspect-[4/5] w-full object-cover md:col-span-5" />
           <div className="md:col-span-6 md:col-start-7">
             <p className="eyebrow text-primary">Our story</p>
             <h2 id="story-title" className="display mt-4 text-5xl lg:text-6xl">Style shouldn't come with a gatekeeper.</h2>
