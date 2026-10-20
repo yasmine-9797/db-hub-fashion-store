@@ -46,19 +46,28 @@ export function Shop({ category, setCategory, query, setQuery, searchRef }: {
         </div>
       ) : (
         <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
-          {list.map((p) => (
+          {list.map((p) => {
+            const off = discountPct(p);
+            return (
             <li key={p.id} className="group">
               <button onClick={() => setActive(p)} className="block w-full text-left" aria-label={`Quick view ${p.name}`}>
                 <div className="relative aspect-[3/4] overflow-hidden bg-muted">
                   <img src={p.img} alt={p.name} loading="lazy" width={768} height={1024} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  {off > 0 && <span className="eyebrow absolute left-0 top-0 bg-primary px-2.5 py-1.5 text-[0.6rem] text-primary-foreground">{off}% off</span>}
                   <span className="eyebrow absolute bottom-0 left-0 right-0 translate-y-full bg-foreground/85 py-3 text-center text-[0.6rem] text-background transition-transform group-hover:translate-y-0 group-focus-visible:translate-y-0">Quick view</span>
                 </div>
                 <p className="eyebrow mt-4 text-[0.6rem] text-muted-foreground">{CATEGORIES.find((c) => c.id === p.category)?.name}</p>
                 <h3 className="mt-1 font-medium">{p.name}</h3>
-                <p className="mt-1 text-sm">{fmt(p.price)} <span className="text-xs text-muted-foreground">· demo price</span></p>
+                <p className="mt-1 text-sm">
+                  {fmt(p.price)}
+                  {off > 0 && <s className="ml-2 text-xs text-muted-foreground">{fmt(p.mrp)}</s>}
+                  <span className="ml-2 text-xs text-muted-foreground">· demo price</span>
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">Sizes: {p.sizes.join(", ")}</p>
               </button>
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
       {active && <QuickView p={active} onClose={() => setActive(null)} />}

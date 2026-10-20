@@ -46,19 +46,22 @@ export const CATEGORIES: { id: CategoryId; name: string; note: string; img: stri
 ];
 
 export type Product = {
-  id: string; name: string; category: CategoryId; price: number; img: string; desc: string;
+  id: string; name: string; category: CategoryId; price: number; mrp: number; sizes: string[]; img: string; desc: string;
 };
 
-/** DEMO DATA — names and prices are placeholders, not real stock or prices. */
+export const discountPct = (p: Product) =>
+  p.mrp > p.price ? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
+
+/** DEMO DATA — names, prices and discounts are placeholders, not real stock or pricing. */
 export const PRODUCTS: Product[] = [
-  { id: "p1", name: "Oversized Linen Shirt", category: "unisex", price: 799, img: shirt, desc: "Relaxed drop-shoulder linen-look shirt in cream." },
-  { id: "p2", name: "Washed Denim Jacket", category: "imported", price: 1299, img: denim, desc: "Classic trucker silhouette in mid-wash denim." },
-  { id: "p3", name: "Cable Vest & Pleat Set", category: "korean", price: 1499, img: knit, desc: "Burgundy cable-knit vest paired with a satin pleated skirt." },
-  { id: "p4", name: "Square-Neck Midi Dress", category: "women", price: 1199, img: women, desc: "Burgundy midi with puff sleeves and fitted bodice." },
-  { id: "p5", name: "Cropped Knit Cardigan", category: "korean", price: 899, img: korean, desc: "Soft cream cardigan with pearl-tone buttons." },
-  { id: "p6", name: "Fleece Hoodie & Cargo", category: "unisex", price: 1599, img: unisex, desc: "Heavyweight hoodie with wide cargo trousers." },
-  { id: "p7", name: "Surplus Knit Bundle", category: "imported", price: 999, img: imported, desc: "Assorted imported knits — styles vary by lot." },
-  { id: "p8", name: "Tailored Wide Suit", category: "women", price: 2199, img: hero, desc: "Oversized blazer with pleated wide-leg trousers." },
+  { id: "p1", name: "Oversized Linen Shirt", category: "unisex", price: 799, mrp: 1199, sizes: ["S", "M", "L", "XL"], img: shirt, desc: "Relaxed drop-shoulder linen-look shirt in cream." },
+  { id: "p2", name: "Washed Denim Jacket", category: "imported", price: 1299, mrp: 1799, sizes: ["M", "L", "XL"], img: denim, desc: "Classic trucker silhouette in mid-wash denim." },
+  { id: "p3", name: "Cable Vest & Pleat Set", category: "korean", price: 1499, mrp: 1999, sizes: ["S", "M", "L"], img: knit, desc: "Burgundy cable-knit vest paired with a satin pleated skirt." },
+  { id: "p4", name: "Square-Neck Midi Dress", category: "women", price: 1199, mrp: 1599, sizes: ["S", "M", "L", "XL"], img: women, desc: "Burgundy midi with puff sleeves and fitted bodice." },
+  { id: "p5", name: "Cropped Knit Cardigan", category: "korean", price: 899, mrp: 1299, sizes: ["S", "M", "L"], img: korean, desc: "Soft cream cardigan with pearl-tone buttons." },
+  { id: "p6", name: "Fleece Hoodie & Cargo", category: "unisex", price: 1599, mrp: 2199, sizes: ["M", "L", "XL"], img: unisex, desc: "Heavyweight hoodie with wide cargo trousers." },
+  { id: "p7", name: "Surplus Knit Bundle", category: "imported", price: 999, mrp: 1399, sizes: ["Free size"], img: imported, desc: "Assorted imported knits — styles vary by lot." },
+  { id: "p8", name: "Tailored Wide Suit", category: "women", price: 2199, mrp: 2899, sizes: ["S", "M", "L", "XL"], img: hero, desc: "Oversized blazer with pleated wide-leg trousers." },
 ];
 
 export const GALLERY = [hero, korean, knit, unisex, denim, women];
