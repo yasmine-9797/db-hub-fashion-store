@@ -44,44 +44,47 @@ export function EnquiryForm() {
     </div>
   );
 
-  const F = ({ name, label, children }: { name: keyof Errors; label: string; children: React.ReactNode }) => (
-    <div>
-      <label htmlFor={name} className="eyebrow text-[0.6rem] text-muted-foreground">{label}</label>
-      {children}
-      {errors[name] && <p id={`${name}-err`} className="mt-1 text-xs text-destructive">{errors[name]}</p>}
-    </div>
-  );
   const a = (n: keyof Errors) => ({ id: n, name: n, "aria-invalid": !!errors[n], "aria-describedby": errors[n] ? `${n}-err` : undefined });
 
   return (
     <form onSubmit={submit} noValidate className="grid gap-6 sm:grid-cols-2">
-      <F name="name" label="Name *"><input {...a("name")} className="field" autoComplete="name" /></F>
-      <F name="phone" label="Phone *"><input {...a("phone")} className="field" inputMode="numeric" autoComplete="tel" /></F>
-      <F name="business" label="Business name (optional)"><input {...a("business")} className="field" /></F>
-      <F name="interest" label="Product interest *">
+      <F error={errors.name} name="name" label="Name *"><input {...a("name")} className="field" autoComplete="name" /></F>
+      <F error={errors.phone} name="phone" label="Phone *"><input {...a("phone")} className="field" inputMode="numeric" autoComplete="tel" /></F>
+      <F error={errors.business} name="business" label="Business name (optional)"><input {...a("business")} className="field" /></F>
+      <F error={errors.interest} name="interest" label="Product interest *">
         <select {...a("interest")} className="field" defaultValue="">
           <option value="" disabled>Select</option>
           <option>Korean Edit</option><option>Unisex Collection</option><option>Women's Wear</option><option>Imported &amp; Surplus</option><option>Mixed</option>
         </select>
       </F>
-      <F name="quantity" label="Estimated quantity *">
+      <F error={errors.quantity} name="quantity" label="Estimated quantity *">
         <select {...a("quantity")} className="field" defaultValue="">
           <option value="" disabled>Select</option>
           <option>Retail (1–5 pcs)</option><option>Small lot (6–50 pcs)</option><option>Wholesale (50–200 pcs)</option><option>Bulk (200+ pcs)</option>
         </select>
       </F>
-      <F name="location" label="Preferred location *">
+      <F error={errors.location} name="location" label="Preferred location *">
         <select {...a("location")} className="field" defaultValue="">
           <option value="" disabled>Select</option><option>Chennai</option><option>Coimbatore</option><option>Either</option>
         </select>
       </F>
       <div className="sm:col-span-2">
-        <F name="message" label="Message"><textarea {...a("message")} rows={3} className="field resize-none" /></F>
+        <F error={errors.message} name="message" label="Message"><textarea {...a("message")} rows={3} className="field resize-none" /></F>
       </div>
       <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center">
         <button type="submit" className="btn-primary justify-center">Submit enquiry</button>
         <p className="text-xs text-muted-foreground">Demo form — not yet connected to email or messaging.</p>
       </div>
     </form>
+  );
+}
+
+function F({ name, label, error, children }: { name: string; label: string; error?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label htmlFor={name} className="eyebrow text-[0.6rem] text-muted-foreground">{label}</label>
+      {children}
+      {error && <p id={`${name}-err`} className="mt-1 text-xs text-destructive">{error}</p>}
+    </div>
   );
 }
