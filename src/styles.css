@@ -120,3 +120,12 @@
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: none; }
 }
+
+/* 3D product cards */
+.card-3d { perspective: 900px; animation: card-rise 0.7s cubic-bezier(.2,.7,.2,1) both; }
+.card-3d-inner { transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); transform-style: preserve-3d; transition: transform .25s ease-out, box-shadow .3s; }
+.card-3d:hover .card-3d-inner { box-shadow: 0 30px 50px -20px color-mix(in oklab, var(--primary) 45%, transparent); }
+.card-3d-shine { opacity: 0; transition: opacity .3s; background: radial-gradient(circle at var(--mx,50%) var(--my,50%), color-mix(in oklab, var(--background) 45%, transparent), transparent 60%); }
+.card-3d:hover .card-3d-shine { opacity: 1; }
+@keyframes card-rise { from { opacity: 0; transform: translateY(40px) rotateX(18deg); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .card-3d { animation: none; } .card-3d-inner { transform: none; } }
