@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, Instagram, MapPin, Phone } from "lucide-react
 import hero from "@/assets/hero.jpg";
 import storyImg from "@/assets/cat-imported.jpg";
 import { Header, Logo } from "@/components/store/Header";
+import { useScrollAnimations } from "@/hooks/use-scroll-animations";
 import { Shop } from "@/components/store/Shop";
 import { EnquiryForm } from "@/components/store/EnquiryForm";
 import { CATEGORIES, GALLERY, INSTAGRAM_URL, PHONES, STORES, mapsUrl, type CategoryId } from "@/lib/store-data";
@@ -26,6 +27,7 @@ function Index() {
   const [category, setCategory] = useState<CategoryId | "all">("all");
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
+  useScrollAnimations();
   const goShop = (c: CategoryId | "all") => {
     setCategory(c);
     document.getElementById("new-arrivals")?.scrollIntoView();

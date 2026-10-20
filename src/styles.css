@@ -129,3 +129,19 @@
 .card-3d:hover .card-3d-shine { opacity: 1; }
 @keyframes card-rise { from { opacity: 0; transform: translateY(40px) rotateX(18deg); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .card-3d { animation: none; } .card-3d-inner { transform: none; } }
+
+/* Scroll-reveal system */
+.sa { transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1), clip-path 1s cubic-bezier(.7,0,.2,1), filter .8s; }
+.sa-up:not(.sa-in) { opacity: 0; transform: translateY(28px); }
+.sa-title:not(.sa-in) { opacity: 0; transform: translateY(40px) skewY(3deg); filter: blur(6px); }
+.sa-zoom:not(.sa-in) { opacity: 0; transform: scale(1.12); clip-path: inset(12% 0 12% 0); }
+.sa-zoom.sa-in { clip-path: inset(0 0 0 0); }
+
+/* Micro-interactions */
+main a, main button { transition: transform .25s ease, box-shadow .25s ease, background-color .25s, color .25s; }
+main a:active, main button:active { transform: scale(.97); }
+.btn-primary:hover, .btn-outline:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -12px color-mix(in oklab, var(--primary) 60%, transparent); }
+main section img { transition: transform .9s cubic-bezier(.2,.7,.2,1), opacity .8s, clip-path 1s cubic-bezier(.7,0,.2,1), filter .8s; }
+main a:hover img, main button:hover img { transform: scale(1.06); }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { .sa { opacity: 1 !important; transform: none !important; clip-path: none !important; filter: none !important; } html { scroll-behavior: auto; } }
