@@ -79,7 +79,7 @@ export function EnquiryForm() {
   );
 }
 
-function F({ name, label, error, children }: { name: string; label: string; error?: string; children: React.ReactNode }) {
+function F({ name, label, error, children }: { name: string; label: string; error?: string | undefined; children: React.ReactNode }) {
   return (
     <div>
       <label htmlFor={name} className="eyebrow text-[0.6rem] text-muted-foreground">{label}</label>
