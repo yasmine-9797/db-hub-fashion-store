@@ -6,6 +6,10 @@ import shirt from "@/assets/p-shirt.jpg";
 import denim from "@/assets/p-denim.jpg";
 import knit from "@/assets/p-knit.jpg";
 import hero from "@/assets/hero.jpg";
+import blouse from "@/assets/p-blouse.jpg";
+import tee from "@/assets/p-tee.jpg";
+import satin from "@/assets/p-satin.jpg";
+import bomber from "@/assets/p-bomber.jpg";
 
 /**
  * EDITABLE CONFIG. Set WHATSAPP_NUMBER to the confirmed WhatsApp-enabled
@@ -62,6 +66,10 @@ export const PRODUCTS: Product[] = [
   { id: "p6", name: "Fleece Hoodie & Cargo", category: "unisex", price: 1599, mrp: 2199, sizes: ["M", "L", "XL"], img: unisex, desc: "Heavyweight hoodie with wide cargo trousers." },
   { id: "p7", name: "Surplus Knit Bundle", category: "imported", price: 999, mrp: 1399, sizes: ["Free size"], img: imported, desc: "Assorted imported knits — styles vary by lot." },
   { id: "p8", name: "Tailored Wide Suit", category: "women", price: 2199, mrp: 2899, sizes: ["S", "M", "L", "XL"], img: hero, desc: "Oversized blazer with pleated wide-leg trousers." },
+  { id: "p9", name: "Blush Poplin Shirt & Wide Pant", category: "korean", price: 1399, mrp: 1899, sizes: ["S", "M", "L"], img: blouse, desc: "Pastel pink oversized shirt with cream pleated trousers." },
+  { id: "p10", name: "Graphic Tee & Baggy Jeans", category: "unisex", price: 1099, mrp: 1599, sizes: ["S", "M", "L", "XL"], img: tee, desc: "Washed black graphic tee with relaxed wide-leg denim." },
+  { id: "p11", name: "Satin Shirt Co-ord", category: "women", price: 1799, mrp: 2499, sizes: ["S", "M", "L", "XL"], img: satin, desc: "Burgundy satin shirt and flowing wide-leg pants." },
+  { id: "p12", name: "Olive Bomber Jacket", category: "imported", price: 1499, mrp: 2199, sizes: ["M", "L", "XL"], img: bomber, desc: "Imported nylon bomber with sleeve zip pocket." },
 ];
 
 export const GALLERY = [hero, korean, knit, unisex, denim, women];

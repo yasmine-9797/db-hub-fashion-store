@@ -1,3 +1,4 @@
+import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MessageCircle, Phone, Search, X } from "lucide-react";
 import { CATEGORIES, PHONES, PRODUCTS, discountPct, whatsappUrl, type CategoryId, type Product } from "@/lib/store-data";
@@ -49,9 +50,10 @@ export function Shop({ category, setCategory, query, setQuery, searchRef }: {
           {list.map((p) => {
             const off = discountPct(p);
             return (
-            <li key={p.id} className="group">
+            <li key={p.id} className="group card-3d" style={{ animationDelay: `${(list.indexOf(p) % 8) * 70}ms` }} onMouseMove={tilt} onMouseLeave={untilt}>
               <button onClick={() => setActive(p)} className="block w-full text-left" aria-label={`Quick view ${p.name}`}>
-                <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+                <div className="card-3d-inner relative aspect-[3/4] overflow-hidden bg-muted shadow-lg">
+                  <span className="card-3d-shine pointer-events-none absolute inset-0 z-10" />
                   <img src={p.img} alt={p.name} loading="lazy" width={768} height={1024} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   {off > 0 && <span className="eyebrow absolute left-0 top-0 bg-primary px-2.5 py-1.5 text-[0.6rem] text-primary-foreground">{off}% off</span>}
                   <span className="eyebrow absolute bottom-0 left-0 right-0 translate-y-full bg-foreground/85 py-3 text-center text-[0.6rem] text-background transition-transform group-hover:translate-y-0 group-focus-visible:translate-y-0">Quick view</span>
@@ -73,6 +75,19 @@ export function Shop({ category, setCategory, query, setQuery, searchRef }: {
       {active && <QuickView p={active} onClose={() => setActive(null)} />}
     </section>
   );
+}
+
+function tilt(e: React.MouseEvent<HTMLLIElement>) {
+  const el = e.currentTarget, r = el.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+  el.style.setProperty("--rx", `${-y * 14}deg`);
+  el.style.setProperty("--ry", `${x * 14}deg`);
+  el.style.setProperty("--mx", `${(x + 0.5) * 100}%`);
+  el.style.setProperty("--my", `${(y + 0.5) * 100}%`);
+}
+function untilt(e: React.MouseEvent<HTMLLIElement>) {
+  e.currentTarget.style.setProperty("--rx", "0deg");
+  e.currentTarget.style.setProperty("--ry", "0deg");
 }
 
 function QuickView({ p, onClose }: { p: Product; onClose: () => void }) {
