@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MessageCircle, Phone, Search, X } from "lucide-react";
-import { CATEGORIES, PHONES, PRODUCTS, whatsappUrl, type CategoryId, type Product } from "@/lib/store-data";
+import { CATEGORIES, PHONES, PRODUCTS, discountPct, whatsappUrl, type CategoryId, type Product } from "@/lib/store-data";
 
 const fmt = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -77,6 +77,7 @@ export function Shop({ category, setCategory, query, setQuery, searchRef }: {
 
 function QuickView({ p, onClose }: { p: Product; onClose: () => void }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [size, setSize] = useState<string | null>(null);
   useEffect(() => {
     closeRef.current?.focus();
     const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -84,7 +85,8 @@ function QuickView({ p, onClose }: { p: Product; onClose: () => void }) {
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", k); document.body.style.overflow = ""; };
   }, [onClose]);
-  const wa = whatsappUrl(`Hi DB Hub, I'd like to enquire about: ${p.name}`);
+  const off = discountPct(p);
+  const wa = whatsappUrl(`Hi DB Hub, I'd like to enquire about: ${p.name}${size ? ` (Size: ${size})` : ""}`);
   return (
     <div role="dialog" aria-modal="true" aria-labelledby="qv-title" className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/60 sm:items-center sm:p-6" onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} className="reveal grid max-h-[92vh] w-full max-w-4xl overflow-auto bg-background sm:grid-cols-2">
@@ -93,8 +95,25 @@ function QuickView({ p, onClose }: { p: Product; onClose: () => void }) {
           <button ref={closeRef} onClick={onClose} aria-label="Close" className="absolute right-4 top-4 p-2"><X className="h-5 w-5" /></button>
           <p className="eyebrow text-primary">{CATEGORIES.find((c) => c.id === p.category)?.name}</p>
           <h3 id="qv-title" className="display mt-3 text-4xl">{p.name}</h3>
-          <p className="mt-4 text-xl">{fmt(p.price)}</p>
+          <p className="mt-4 text-xl">
+            {fmt(p.price)}
+            {off > 0 && <>
+              <s className="ml-2 text-sm text-muted-foreground">{fmt(p.mrp)}</s>
+              <span className="ml-2 text-xs text-primary">{off}% off</span>
+            </>}
+          </p>
           <p className="text-xs text-muted-foreground">Demo price — confirm in store.</p>
+          <div className="mt-6">
+            <p className="eyebrow text-[0.6rem] text-muted-foreground">Size</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {p.sizes.map((s) => (
+                <button key={s} onClick={() => setSize(s)} aria-pressed={size === s}
+                  className={`border px-3 py-1.5 text-xs transition-colors ${size === s ? "border-primary bg-primary text-primary-foreground" : "hover:border-foreground"}`}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
           <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
           <div className="mt-auto flex flex-col gap-3 pt-8">
             {wa && <a href={wa} target="_blank" rel="noreferrer" className="btn-primary justify-center"><MessageCircle className="h-4 w-4" />Enquire on WhatsApp</a>}
