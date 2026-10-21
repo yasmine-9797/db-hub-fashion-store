@@ -1,207 +1,452 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
-import { ArrowRight, ArrowUpRight, Instagram, MapPin, Phone } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Instagram,
+  Layers,
+  MessageCircle,
+  Search,
+  Shirt,
+  Store,
+} from "lucide-react";
 import hero from "@/assets/hero.jpg";
-import storyImg from "@/assets/cat-imported.jpg";
-import { Header, Logo } from "@/components/store/Header";
-import { useScrollAnimations } from "@/hooks/use-scroll-animations";
-import { Shop } from "@/components/store/Shop";
-import { EnquiryForm } from "@/components/store/EnquiryForm";
-import { CATEGORIES, GALLERY, INSTAGRAM_URL, PHONES, STORES, mapsUrl, type CategoryId } from "@/lib/store-data";
+import lookKorean from "@/assets/cat-korean.jpg";
+import lookStreet from "@/assets/p-tee.jpg";
+import lookLayer from "@/assets/p-bomber.jpg";
+import lookEssentials from "@/assets/p-shirt.jpg";
+import lookNew from "@/assets/p-blouse.jpg";
+import { Reveal } from "@/components/common/Reveal";
+import { WhatsAppButton, WhatsAppIcon } from "@/components/common/WhatsAppButton";
+import { Container, PageShell } from "@/components/layout/PageShell";
+import { ProductCard, ProductGrid } from "@/components/product/ProductCard";
+import { CONTACT, SITE, STORES } from "@/config/site";
+import {
+  ACTIVE_PRODUCTS,
+  CATALOGUE_IS_DEMO,
+  COLLECTIONS,
+  HOME_CATEGORY_SLUGS,
+  matchesCollection,
+  sortProducts,
+  type Collection,
+} from "@/lib/catalog";
+import { seo } from "@/lib/seo";
+import { wholesaleMessage } from "@/lib/whatsapp";
+import gallery1 from "@/assets/cat-women.jpg";
+import gallery2 from "@/assets/p-satin.jpg";
+import gallery3 from "@/assets/cat-unisex.jpg";
+import gallery4 from "@/assets/p-knit.jpg";
+import gallery5 from "@/assets/p-denim.jpg";
+import gallery6 from "@/assets/cat-imported.jpg";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "DB Hub Cloth Store — Korean, Unisex & Imported Fashion | Chennai & Coimbatore" },
-      { name: "description", content: "Trend-aware, budget-friendly Korean-inspired, unisex, women's and imported surplus clothing. Wholesale & retail in Chennai and Coimbatore." },
-      { property: "og:title", content: "DB Hub Cloth Store — Fashion That Moves With You" },
-      { property: "og:description", content: "Wholesale & retail fashion stores in Chennai and Coimbatore." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
+  head: () =>
+    seo({ title: `${SITE.name} | ${SITE.tagline}`, description: SITE.description, path: "/" }),
+  component: Home,
 });
 
-function Index() {
-  const [category, setCategory] = useState<CategoryId | "all">("all");
-  const [query, setQuery] = useState("");
-  const searchRef = useRef<HTMLInputElement>(null);
-  useScrollAnimations();
-  const goShop = (c: CategoryId | "all") => {
-    setCategory(c);
-    document.getElementById("new-arrivals")?.scrollIntoView();
-  };
+const featured = sortProducts(
+  ACTIVE_PRODUCTS.filter((p) => p.featured),
+  "featured",
+).slice(0, 8);
+const budget = sortProducts(
+  ACTIVE_PRODUCTS.filter((p) => p.budgetEdit),
+  "price-asc",
+);
+const categories = HOME_CATEGORY_SLUGS.map((slug) =>
+  COLLECTIONS.find((c) => c.slug === slug),
+).filter((c): c is Collection => Boolean(c));
+const countIn = (c: Collection) => ACTIVE_PRODUCTS.filter((p) => matchesCollection(p, c)).length;
 
+const LOOKBOOK = [
+  {
+    title: "Korean-Inspired Looks",
+    note: "Soft knits, pleats and layered pastels",
+    img: lookKorean,
+    slug: "korean",
+    span: "md:col-span-7 md:row-span-2",
+  },
+  {
+    title: "Everyday Essentials",
+    note: "Easy shirts you'll reach for daily",
+    img: lookEssentials,
+    slug: "unisex",
+    span: "md:col-span-5",
+  },
+  {
+    title: "Layering & Outerwear",
+    note: "Jackets and bombers for every season",
+    img: lookLayer,
+    slug: "shirts-outerwear",
+    span: "md:col-span-5",
+  },
+  {
+    title: "Casual Street Style",
+    note: "Graphic tees, baggy denim, oversized fits",
+    img: lookStreet,
+    slug: "tops-tees",
+    span: "md:col-span-6",
+  },
+  {
+    title: "New Season Finds",
+    note: "The latest pieces to land at DB Hub",
+    img: lookNew,
+    slug: "new-arrivals",
+    span: "md:col-span-6",
+  },
+];
+
+const BENEFITS = [
+  {
+    icon: Store,
+    title: "Wholesale & retail",
+    text: "Shop a single piece or enquire about bulk buying for your boutique.",
+  },
+  {
+    icon: Layers,
+    title: "Many ways to dress",
+    text: "Women's wear, unisex fashion, Korean-inspired styles and imported finds.",
+  },
+  {
+    icon: MessageCircle,
+    title: "WhatsApp assistance",
+    text: "Ask about sizes, availability or an order and chat directly with our team.",
+  },
+  {
+    icon: Search,
+    title: "Easy enquiries",
+    text: "Send your whole bag as one enquiry — we confirm stock and price with you.",
+  },
+  {
+    icon: Shirt,
+    title: "Browse online, visit in store",
+    text: `Explore online, then shop or collect in ${STORES.map((s) => s.city).join(" or ")}.`,
+  },
+];
+
+const GALLERY = [gallery1, gallery2, gallery3, gallery4, gallery5, gallery6];
+
+function Home() {
   return (
-    <>
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-background focus:p-3">Skip to content</a>
-      <Header onSearch={() => { document.getElementById("new-arrivals")?.scrollIntoView(); setTimeout(() => searchRef.current?.focus({ preventScroll: true }), 400); }} />
-      <main id="main">
-        {/* HERO */}
-        <section id="home" className="relative overflow-hidden bg-secondary">
-          <img src={hero} alt="Model in an oversized burgundy suit" width={1600} height={1104} fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover object-[75%_center]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-transparent md:via-background/40" />
-          <div className="relative mx-auto flex min-h-[82vh] max-w-7xl flex-col justify-end px-5 pb-16 pt-32 lg:px-10 lg:pb-24">
-            <p className="eyebrow reveal text-primary">Your style. Your rules.</p>
-            <h1 className="display reveal mt-5 max-w-3xl text-6xl [animation-delay:.1s] sm:text-7xl lg:text-[8.5rem]">
-              Fashion That <em className="text-primary">Moves</em> With You.
-            </h1>
-            <p className="reveal mt-6 max-w-md text-base leading-relaxed text-foreground/80 [animation-delay:.2s]">
-              Korean-inspired, unisex, imported and surplus clothing — trend-aware, budget-friendly and open to every shopper. Retail and wholesale.
-            </p>
-            <div className="reveal mt-9 flex flex-wrap gap-3 [animation-delay:.3s]">
-              <a href="#collections" className="btn-primary">Explore Collection <ArrowRight className="h-4 w-4" /></a>
-              <a href="#stores" className="btn-outline">Visit Our Stores</a>
+    <PageShell>
+      {/* C — HERO */}
+      {/*
+        Phones: the photo fills the first screen with the model centred; the copy sits at the
+        bottom in ivory on a dark fade that starts just above the text, so it stays readable over
+        the photo and the buttons stay on screen. Tablets: the photo fills the hero with the model
+        on the right and the copy on the empty backdrop to her left. Desktop: text column + image
+        column. `short:` trims the copy on short screens (phones with browser bars showing,
+        landscape phones, small laptops). In the photo the model stands at ~58–80% across.
+      */}
+      <section aria-labelledby="hero-title" className="relative overflow-hidden bg-background">
+        <div className="relative mx-auto grid max-w-7xl lg:min-h-[min(calc(100dvh-7rem),56rem)] lg:grid-cols-[1fr_1.05fr]">
+          <div className="absolute inset-0 lg:relative lg:order-2">
+            <img
+              src={hero}
+              alt="Model in an oversized burgundy blazer and wide-leg trousers"
+              width={1600}
+              height={1104}
+              fetchPriority="high"
+              className="hero-zoom h-full w-full object-cover object-[80%_top] sm:object-[35%_15%] lg:absolute lg:inset-0 lg:object-[78%_center]"
+            />
+            {/* Tablets: ivory fade from the left behind the copy. */}
+            <div className="pointer-events-none absolute inset-0 hidden bg-linear-to-r from-background/95 via-background/70 via-38% to-transparent to-62% sm:block lg:hidden" />
+          </div>
+
+          <div className="relative flex min-h-[min(calc(100svh-6rem),52rem)] flex-col justify-end sm:min-h-[min(78svh,48rem)] sm:max-w-[28rem] sm:justify-center sm:px-8 sm:py-16 md:max-w-[30rem] lg:order-1 lg:min-h-0 lg:max-w-none lg:px-10 lg:py-20 sm:short:py-10">
+            <div className="bg-linear-to-t from-ink/90 via-ink/75 via-70% to-transparent px-5 pb-8 pt-24 text-background sm:bg-none sm:p-0 sm:text-foreground">
+              <p className="eyebrow reveal sm:text-primary">Meet your new favourite finds</p>
+              <h1
+                id="hero-title"
+                className="display reveal mt-3 text-[clamp(2.4rem,11.5vw,3.1rem)] leading-[0.95] [animation-delay:.08s] sm:mt-5 sm:text-6xl lg:text-[clamp(3.5rem,10svh,4.5rem)] xl:text-[clamp(4.5rem,11.5svh,5.6rem)] sm:max-lg:short:text-[2.75rem]"
+              >
+                Everyday style.
+                <br />
+                <em className="font-medium text-champagne sm:text-primary">
+                  Unbelievably good finds.
+                </em>
+              </h1>
+              {/* Short line on phones keeps the buttons on the first screen; full copy from tablet up. */}
+              <p className="reveal mt-3 text-[0.95rem] text-background/85 [animation-delay:.16s] sm:hidden short:hidden">
+                Women's, unisex, Korean &amp; imported fashion.
+              </p>
+              <p className="reveal mt-6 hidden max-w-md text-[1.02rem] leading-relaxed text-muted-foreground [animation-delay:.16s] sm:block lg:mt-7 sm:max-lg:short:hidden">
+                Discover your next favourite look with fashion finds from DB Hub. Explore women's
+                styles, unisex essentials, Korean fashion, imported collections and more.
+              </p>
+              <div className="reveal mt-6 flex flex-col gap-3 [animation-delay:.24s] sm:mt-8 sm:flex-row lg:mt-9">
+                <Link
+                  to="/shop"
+                  className="btn-primary justify-center rounded-lg max-sm:bg-background max-sm:text-primary-deep max-sm:hover:bg-white"
+                >
+                  Shop the collection <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/wholesale"
+                  className="btn-outline justify-center rounded-lg max-sm:border-background/70 max-sm:text-background max-sm:hover:bg-background max-sm:hover:text-ink sm:max-lg:bg-background/60 sm:max-lg:backdrop-blur-sm"
+                >
+                  Explore wholesale
+                </Link>
+              </div>
+              <p className="reveal mt-8 hidden items-center gap-3 text-sm text-muted-foreground [animation-delay:.32s] sm:flex lg:mt-10 sm:short:hidden">
+                <span className="h-px w-10 bg-champagne" />
+                Retail & wholesale · {STORES.map((s) => s.city).join(" · ")}
+              </p>
             </div>
-          </div>
-        </section>
-
-        {/* CATEGORIES */}
-        <section id="collections" aria-labelledby="col-title" className="mx-auto max-w-7xl px-5 py-24 lg:px-10">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="eyebrow text-primary">Collections</p>
-              <h2 id="col-title" className="display mt-3 text-5xl md:text-7xl">Shop by mood</h2>
-            </div>
-            <button onClick={() => goShop("all")} className="eyebrow hidden items-center gap-2 text-[0.68rem] hover:text-primary md:flex">View all <ArrowRight className="h-4 w-4" /></button>
-          </div>
-          <ul className="mt-12 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
-            {CATEGORIES.map((c, i) => (
-              <li key={c.id} className={i % 2 ? "lg:mt-12" : ""}>
-                <button onClick={() => goShop(c.id)} className="group relative block aspect-[3/4] w-full overflow-hidden text-left" aria-label={`Browse ${c.name}`}>
-                  <img src={c.img} alt="" loading="lazy" width={768} height={1024} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/10 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-4 text-background md:p-6">
-                    <span className="eyebrow text-[0.6rem] text-champagne">0{i + 1}</span>
-                    <h3 className="display mt-2 text-2xl md:text-4xl">{c.name}</h3>
-                    <p className="mt-1 hidden text-xs opacity-80 sm:block">{c.note}</p>
-                    <ArrowUpRight className="absolute right-4 top-0 h-5 w-5 -translate-y-full opacity-0 transition-all group-hover:opacity-100 md:right-6" />
-                  </div>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <Shop category={category} setCategory={setCategory} query={query} setQuery={setQuery} searchRef={searchRef} />
-
-        {/* WHOLESALE / RETAIL */}
-        <section id="wholesale" aria-labelledby="ws-title" className="grid md:grid-cols-2">
-          <div className="bg-primary-deep px-6 py-20 text-primary-foreground md:px-14 lg:py-28">
-            <p className="eyebrow text-champagne">For resellers & boutiques</p>
-            <h2 id="ws-title" className="display mt-4 text-5xl lg:text-7xl">Wholesale</h2>
-            <p className="mt-6 max-w-sm leading-relaxed opacity-80">Stock your store with trend-led Korean-inspired, unisex and imported surplus lots. Tell us what you need and we'll talk quantities and options.</p>
-            <a href="#contact" className="btn-outline mt-10 !border-primary-foreground !text-primary-foreground hover:!bg-primary-foreground hover:!text-primary-deep">Wholesale enquiry <ArrowRight className="h-4 w-4" /></a>
-          </div>
-          <div className="bg-champagne/40 px-6 py-20 md:px-14 lg:py-28">
-            <p className="eyebrow text-primary">For everyday style</p>
-            <h2 className="display mt-4 text-5xl lg:text-7xl">Retail</h2>
-            <p className="mt-6 max-w-sm leading-relaxed text-foreground/75">Walk in, try on, and find pieces that feel like you — at prices that let you keep exploring. Everyone's welcome.</p>
-            <a href="#stores" className="btn-outline mt-10">Find a store <ArrowRight className="h-4 w-4" /></a>
-          </div>
-        </section>
-
-        {/* STORY */}
-        <section aria-labelledby="story-title" className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-28 md:grid-cols-12 lg:px-10">
-          <img src={storyImg} alt="Folded imported knitwear and denim" loading="lazy" width={768} height={1024} className="aspect-[4/5] w-full object-cover md:col-span-5" />
-          <div className="md:col-span-6 md:col-start-7">
-            <p className="eyebrow text-primary">Our story</p>
-            <h2 id="story-title" className="display mt-4 text-5xl lg:text-6xl">Style shouldn't come with a gatekeeper.</h2>
-            <p className="mt-6 leading-relaxed text-muted-foreground">DB Hub began with a simple idea: bring the looks people love — Korean-inspired silhouettes, easy unisex fits and quality imported pieces — to shoppers at honest, budget-friendly prices.</p>
-            <p className="mt-4 leading-relaxed text-muted-foreground">From our stores in Chennai and Coimbatore, we serve individual shoppers and resellers alike, keeping the racks fresh and the welcome warm.</p>
-          </div>
-        </section>
-
-        {/* STORES */}
-        <section id="stores" aria-labelledby="stores-title" className="border-t bg-card">
-          <div className="mx-auto max-w-7xl px-5 py-24 lg:px-10">
-            <p className="eyebrow text-primary">Visit us</p>
-            <h2 id="stores-title" className="display mt-3 text-5xl md:text-7xl">Our Stores</h2>
-            <div className="mt-12 grid gap-px bg-border md:grid-cols-2">
-              {STORES.map((s) => (
-                <article key={s.city} className="bg-card p-8 md:p-12">
-                  <h3 className="display text-4xl md:text-5xl">{s.city}</h3>
-                  <p className="mt-5 flex gap-3 text-sm leading-relaxed text-muted-foreground"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{s.address}</p>
-                  <div className="mt-8 flex flex-wrap gap-3">
-                    <a href={`tel:${s.phone}`} className="btn-primary"><Phone className="h-4 w-4" />{s.phone}</a>
-                    <a href={mapsUrl(s.address)} target="_blank" rel="noreferrer" className="btn-outline">Directions <ArrowUpRight className="h-4 w-4" /></a>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* INSTAGRAM */}
-        <section aria-labelledby="ig-title" className="py-24">
-          <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-5 md:flex-row md:items-end lg:px-10">
-            <div>
-              <p className="eyebrow text-primary">@db_hub_cloth_store</p>
-              <h2 id="ig-title" className="display mt-3 text-5xl md:text-7xl">Follow the drops</h2>
-            </div>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="btn-outline self-start"><Instagram className="h-4 w-4" />Open Instagram</a>
-          </div>
-          <ul className="mt-12 grid grid-cols-3 gap-1 md:grid-cols-6">
-            {GALLERY.map((g, i) => (
-              <li key={i}>
-                <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="View DB Hub on Instagram" className="group relative block aspect-square overflow-hidden">
-                  <img src={g} alt="" loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
-                  <span className="absolute inset-0 flex items-center justify-center bg-primary/0 transition group-hover:bg-primary/50"><Instagram className="h-6 w-6 text-primary-foreground opacity-0 group-hover:opacity-100" /></span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 text-center text-xs text-muted-foreground">Preview imagery — see our latest posts on Instagram.</p>
-        </section>
-
-        {/* CONTACT */}
-        <section id="contact" aria-labelledby="contact-title" className="border-t">
-          <div className="mx-auto grid max-w-7xl gap-12 px-5 py-24 md:grid-cols-12 lg:px-10">
-            <div className="md:col-span-4">
-              <p className="eyebrow text-primary">Enquire</p>
-              <h2 id="contact-title" className="display mt-3 text-5xl md:text-6xl">Let's talk style.</h2>
-              <p className="mt-6 text-sm leading-relaxed text-muted-foreground">Retail question or wholesale order — share a few details, or call us directly.</p>
-              <ul className="mt-8 space-y-3">
-                {PHONES.map((p) => <li key={p}><a href={`tel:${p}`} className="display text-3xl hover:text-primary">{p}</a></li>)}
-              </ul>
-            </div>
-            <div className="md:col-span-7 md:col-start-6"><EnquiryForm /></div>
-          </div>
-        </section>
-      </main>
-
-      {/* FOOTER */}
-      <footer className="bg-ink text-background">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
-          <div>
-            <div className="[&_span:first-child]:text-champagne [&_span:last-child]:text-background/60"><Logo /></div>
-            <p className="mt-4 max-w-xs text-sm text-background/60">Wholesale & retail fashion. Korean-inspired, unisex, imported & surplus.</p>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 text-sm hover:text-champagne"><Instagram className="h-4 w-4" />Instagram</a>
-          </div>
-          <div>
-            <h3 className="eyebrow text-champagne">Shop</h3>
-            <ul className="mt-4 space-y-2 text-sm text-background/70">
-              {CATEGORIES.map((c) => <li key={c.id}><button onClick={() => goShop(c.id)} className="hover:text-background">{c.name}</button></li>)}
-            </ul>
-          </div>
-          <div>
-            <h3 className="eyebrow text-champagne">Contact</h3>
-            <ul className="mt-4 space-y-2 text-sm text-background/70">
-              {PHONES.map((p) => <li key={p}><a href={`tel:${p}`} className="hover:text-background">{p}</a></li>)}
-              <li><a href="#contact" className="hover:text-background">Wholesale enquiry</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="eyebrow text-champagne">Stores</h3>
-            <ul className="mt-4 space-y-4 text-sm text-background/70">
-              {STORES.map((s) => <li key={s.city}><a href={mapsUrl(s.address)} target="_blank" rel="noreferrer" className="hover:text-background"><strong className="text-background">{s.city}</strong><br />{s.address}</a></li>)}
-            </ul>
           </div>
         </div>
-        <p className="border-t border-background/10 py-6 text-center text-xs text-background/50">© {new Date().getFullYear()} DB Hub Cloth Store</p>
-      </footer>
-    </>
+      </section>
+
+      {/* D — CATEGORIES */}
+      <section aria-labelledby="cat-title" className="py-20 lg:py-28">
+        <Container>
+          <Reveal className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="eyebrow text-primary">Shop by category</p>
+              <h2 id="cat-title" className="display mt-3 text-5xl md:text-6xl">
+                Find your fit
+              </h2>
+            </div>
+            <Link
+              to="/shop"
+              className="inline-flex items-center gap-2 text-sm font-medium hover:text-primary"
+            >
+              View everything <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Reveal>
+          <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 lg:gap-5">
+            {categories.map((c, i) => (
+              <Reveal as="li" key={c.slug} delay={(i % 4) * 70}>
+                <Link
+                  to="/collections/$slug"
+                  params={{ slug: c.slug }}
+                  className="group relative block aspect-[3/4] overflow-hidden bg-muted"
+                >
+                  <img
+                    src={c.image}
+                    alt=""
+                    loading="lazy"
+                    width={768}
+                    height={1024}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/5 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-4 text-white md:p-5">
+                    <div>
+                      <h3 className="display text-2xl leading-tight md:text-3xl">{c.title}</h3>
+                      <p className="mt-1 text-xs text-white/75">
+                        {countIn(c)} {countIn(c) === 1 ? "piece" : "pieces"}
+                      </p>
+                    </div>
+                    <ArrowUpRight className="h-5 w-5 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* E — FEATURED */}
+      <section aria-labelledby="featured-title" className="border-t bg-card py-20 lg:py-28">
+        <Container>
+          <Reveal className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="eyebrow text-primary">Featured</p>
+              <h2 id="featured-title" className="display mt-3 text-5xl md:text-6xl">
+                Pieces we love right now
+              </h2>
+              {CATALOGUE_IS_DEMO && (
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Illustrative demo products — please confirm availability with our team.
+                </p>
+              )}
+            </div>
+            <Link
+              to="/shop"
+              className="inline-flex items-center gap-2 text-sm font-medium hover:text-primary"
+            >
+              Shop all <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Reveal>
+          <ProductGrid products={featured} className="mt-10 lg:grid-cols-4" />
+        </Container>
+      </section>
+
+      {/* F — BUDGET EDIT */}
+      <section
+        aria-labelledby="budget-title"
+        className="overflow-hidden bg-primary-deep py-20 text-primary-foreground lg:py-28"
+      >
+        <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+          <Reveal>
+            <p className="eyebrow text-champagne">The smart edit</p>
+            <h2 id="budget-title" className="display mt-4 text-5xl leading-[0.95] md:text-7xl">
+              Good style.
+              <br />
+              <em className="text-champagne">Smart finds.</em>
+            </h2>
+            <p className="mt-6 max-w-sm text-[1.02rem] leading-relaxed text-primary-foreground/80">
+              Discover pieces that make personal style more accessible — an edit chosen by our team.
+            </p>
+            <Link
+              to="/collections/$slug"
+              params={{ slug: "budget-finds" }}
+              className="btn-outline mt-9 rounded-lg !border-primary-foreground !text-primary-foreground hover:!bg-primary-foreground hover:!text-primary-deep"
+            >
+              Explore the edit <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Reveal>
+          <ul className="-mx-5 flex snap-x gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] lg:mx-0 lg:px-0">
+            {budget.map((p) => (
+              <li
+                key={p.id}
+                className="w-[62vw] max-w-[260px] shrink-0 snap-start rounded-sm bg-background p-3 text-foreground sm:w-[240px]"
+              >
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* G — LOOKBOOK */}
+      <section aria-labelledby="look-title" className="py-20 lg:py-28">
+        <Container>
+          <Reveal className="max-w-2xl">
+            <p className="eyebrow text-primary">The lookbook</p>
+            <h2 id="look-title" className="display mt-3 text-5xl md:text-7xl">
+              Ways to wear it
+            </h2>
+            <p className="mt-4 text-[1.02rem] leading-relaxed text-muted-foreground">
+              Styling ideas across our collections. Imagery is illustrative while our own shoots are
+              prepared.
+            </p>
+          </Reveal>
+          <ul className="mt-12 grid auto-rows-[18rem] gap-4 md:grid-cols-12 md:auto-rows-[20rem] lg:gap-5">
+            {LOOKBOOK.map((l, i) => (
+              <Reveal as="li" key={l.title} delay={(i % 3) * 90} className={l.span}>
+                <Link
+                  to="/collections/$slug"
+                  params={{ slug: l.slug }}
+                  className="group relative block h-full overflow-hidden bg-muted"
+                >
+                  <img
+                    src={l.img}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-7">
+                    <span className="eyebrow text-[0.6rem] text-champagne">0{i + 1}</span>
+                    <h3 className="display mt-2 text-3xl md:text-4xl">{l.title}</h3>
+                    <p className="mt-1 text-sm text-white/80">{l.note}</p>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* H — WHY DB HUB */}
+      <section aria-labelledby="why-title" className="border-y bg-secondary/50 py-20 lg:py-24">
+        <Container>
+          <Reveal className="text-center">
+            <p className="eyebrow text-primary">Why shop with us</p>
+            <h2 id="why-title" className="display mt-3 text-5xl md:text-6xl">
+              Why shop with DB Hub?
+            </h2>
+          </Reveal>
+          <ul className="mt-12 grid gap-px overflow-hidden border bg-border sm:grid-cols-2 lg:grid-cols-5">
+            {BENEFITS.map((b) => (
+              <li key={b.title} className="bg-background p-6 lg:p-7">
+                <b.icon className="h-6 w-6 text-primary" strokeWidth={1.5} />
+                <h3 className="mt-4 font-semibold">{b.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.text}</p>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* I — INSTAGRAM */}
+      <section aria-labelledby="ig-title" className="py-20 lg:py-28">
+        <Container className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+          <Reveal>
+            <p className="eyebrow text-primary">{CONTACT.instagram.handle}</p>
+            <h2 id="ig-title" className="display mt-3 text-5xl md:text-7xl">
+              Find us on Instagram
+            </h2>
+          </Reveal>
+          <a
+            href={CONTACT.instagram.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary rounded-lg"
+          >
+            <Instagram className="h-4 w-4" />
+            Follow DB Hub
+          </a>
+        </Container>
+        <ul className="mt-12 grid grid-cols-3 gap-1 md:grid-cols-6">
+          {GALLERY.map((src, i) => (
+            <li key={src}>
+              <a
+                href={CONTACT.instagram.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View DB Hub on Instagram (image ${i + 1})`}
+                className="group relative block aspect-square overflow-hidden bg-muted"
+              >
+                <img
+                  src={src}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                />
+                <span className="absolute inset-0 grid place-items-center bg-primary/0 transition group-hover:bg-primary/45">
+                  <Instagram className="h-6 w-6 text-white opacity-0 transition group-hover:opacity-100" />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          Preview images — see our latest posts on Instagram.
+        </p>
+      </section>
+
+      {/* J — WHOLESALE CTA */}
+      <section aria-labelledby="ws-title" className="bg-ink py-20 text-background lg:py-24">
+        <Container className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+          <Reveal>
+            <p className="eyebrow text-champagne">Wholesale</p>
+            <h2 id="ws-title" className="display mt-4 text-5xl md:text-7xl">
+              Looking to buy in bulk?
+            </h2>
+            <p className="mt-5 max-w-lg text-[1.02rem] leading-relaxed text-background/75">
+              Connect with DB Hub to enquire about wholesale collections and bulk purchasing for
+              your store or boutique.
+            </p>
+          </Reveal>
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-start">
+            <WhatsAppButton message={wholesaleMessage({})} className="rounded-lg">
+              Enquire on WhatsApp
+            </WhatsAppButton>
+            <Link
+              to="/wholesale"
+              className="btn-outline rounded-lg !border-background/40 !text-background hover:!bg-background hover:!text-ink"
+            >
+              Send a wholesale enquiry
+            </Link>
+            <p className="flex items-center gap-2 text-sm text-background/60">
+              <WhatsAppIcon className="h-3.5 w-3.5" />
+              {CONTACT.primary.display}
+            </p>
+          </div>
+        </Container>
+      </section>
+    </PageShell>
   );
 }

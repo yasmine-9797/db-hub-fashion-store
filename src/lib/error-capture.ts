@@ -49,16 +49,34 @@ function isErrorLike(value: unknown): value is Error {
   return value instanceof Error;
 }
 
+// A browser that drops the connection mid-request (refresh, navigation, preview
+// reload while SSR modules are still loading) aborts request.signal with Node's
+// ECONNRESET "aborted" error; Start rethrows it and h3 logs it as an unhandled
+// 500. Nobody is waiting for that response, so it is noise, not a failure.
+function isClientDisconnect(error: unknown): boolean {
+  let current: unknown = error;
+  for (let depth = 0; depth < CAUSE_DEPTH_LIMIT && current instanceof Error; depth++) {
+    if ((current as { code?: unknown }).code === "ECONNRESET" && current.message === "aborted") {
+      return true;
+    }
+    current = current.cause;
+  }
+  return false;
+}
+
 // Wrap console.error so errors logged by any layer — including h3's internal
 // unhandled-error logging, which this file cannot hook directly — are both
 // recorded for consumeLastCapturedError and expanded before serialization.
 const originalConsoleError = console.error.bind(console);
 console.error = (...args: unknown[]) => {
+  let clientDisconnect = false;
   const expanded = args.map((arg) => {
     if (!isErrorLike(arg)) return arg;
     record(arg);
+    if (isClientDisconnect(arg)) clientDisconnect = true;
     return describeError(arg);
   });
+  if (clientDisconnect) return;
   originalConsoleError(...expanded);
 };
 

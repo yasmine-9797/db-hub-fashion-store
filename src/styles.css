@@ -3,9 +3,11 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+/* Short screens: landscape phones, small laptops, phones with browser bars showing. */
+@custom-variant short (@media (max-height: 40rem));
 
 @theme inline {
-  --font-display: "Bodoni Moda", "Didot", serif;
+  --font-display: "Cormorant Garamond", "Garamond", "Times New Roman", serif;
   --font-sans: "Manrope", system-ui, sans-serif;
   --radius-sm: 2px;
   --radius-md: 4px;
@@ -34,45 +36,62 @@
   --color-ring: var(--ring);
 }
 
+/* Brand palette (DB Hub brief): burgundy #80002A / #57001D, ivory #FAF7F2, ink #191716,
+   warm grey #77716D, border #E9E2DC, champagne #C8A878. */
 :root {
   --radius: 6px;
-  --background: oklch(0.982 0.004 50);       /* #FAF8F6 */
-  --foreground: oklch(0.205 0 0);            /* #171717 */
-  --ink: oklch(0.205 0 0);
-  --card: oklch(0.995 0.002 50);
-  --card-foreground: oklch(0.205 0 0);
-  --popover: oklch(0.995 0.002 50);
-  --popover-foreground: oklch(0.205 0 0);
-  --primary: oklch(0.36 0.14 10);            /* #80002A */
-  --primary-foreground: oklch(0.982 0.004 50);
-  --primary-deep: oklch(0.26 0.1 8);         /* #4A0018 */
-  --secondary: oklch(0.95 0.012 60);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.95 0.008 60);
-  --muted-foreground: oklch(0.556 0 0);      /* #737373 */
-  --accent: oklch(0.82 0.045 75);            /* #D8C3A5 */
-  --accent-foreground: oklch(0.205 0 0);
-  --champagne: oklch(0.82 0.045 75);
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: oklch(0.982 0.004 50);
-  --border: oklch(0.89 0.012 60);
-  --input: oklch(0.86 0.012 60);
-  --ring: oklch(0.36 0.14 10);
+  --background: #faf7f2;
+  --foreground: #191716;
+  --ink: #191716;
+  --card: #ffffff;
+  --card-foreground: #191716;
+  --popover: #ffffff;
+  --popover-foreground: #191716;
+  --primary: #80002a;
+  --primary-foreground: #ffffff;
+  --primary-deep: #57001d;
+  --secondary: #f3ece4;
+  --secondary-foreground: #191716;
+  --muted: #f1ebe4;
+  --muted-foreground: #6e6864; /* warm grey, nudged darker than #77716D for AA contrast on ivory */
+  --accent: #c8a878;
+  --accent-foreground: #191716;
+  --champagne: #c8a878;
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+  --border: #e9e2dc;
+  --input: #ddd3ca;
+  --ring: #80002a;
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 3px; }
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
+  }
   @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -85,63 +104,228 @@
 
 @utility display {
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 0.95;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
 
 @utility btn-primary {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  background: var(--color-primary); color: var(--color-primary-foreground);
-  padding: 0.95rem 1.6rem; font-size: 0.75rem; letter-spacing: 0.18em;
-  text-transform: uppercase; font-weight: 600; transition: background .3s, transform .3s;
-  &:hover { background: var(--color-primary-deep); }
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  padding: 0.95rem 1.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition:
+    background 0.3s,
+    transform 0.3s;
+  &:hover {
+    background: var(--color-primary-deep);
+  }
 }
 
 @utility btn-outline {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  border: 1px solid var(--color-foreground); color: var(--color-foreground);
-  padding: 0.95rem 1.6rem; font-size: 0.75rem; letter-spacing: 0.18em;
-  text-transform: uppercase; font-weight: 600; transition: background .3s, color .3s;
-  &:hover { background: var(--color-foreground); color: var(--color-background); }
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--color-foreground);
+  color: var(--color-foreground);
+  padding: 0.95rem 1.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition:
+    background 0.3s,
+    color 0.3s;
+  &:hover {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
 }
 
 @utility field {
-  width: 100%; background: transparent; border-bottom: 1px solid var(--color-input);
-  padding: 0.75rem 0; font-size: 0.95rem; transition: border-color .2s;
-  &:focus { outline: none; border-color: var(--color-primary); }
+  width: 100%;
+  background: transparent;
+  border-bottom: 1px solid var(--color-input);
+  padding: 0.75rem 0;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
 }
 
 @utility reveal {
-  animation: reveal 1s cubic-bezier(.2,.7,.2,1) both;
+  animation: reveal 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* 3D product cards */
-.card-3d { perspective: 900px; animation: card-rise 0.7s cubic-bezier(.2,.7,.2,1) both; }
-.card-3d-inner { transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); transform-style: preserve-3d; transition: transform .25s ease-out, box-shadow .3s; }
-.card-3d:hover .card-3d-inner { box-shadow: 0 30px 50px -20px color-mix(in oklab, var(--primary) 45%, transparent); }
-.card-3d-shine { opacity: 0; transition: opacity .3s; background: radial-gradient(circle at var(--mx,50%) var(--my,50%), color-mix(in oklab, var(--background) 45%, transparent), transparent 60%); }
-.card-3d:hover .card-3d-shine { opacity: 1; }
-@keyframes card-rise { from { opacity: 0; transform: translateY(40px) rotateX(18deg); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .card-3d { animation: none; } .card-3d-inner { transform: none; } }
+/* Hero image entrance: a slow settle from a slight zoom. */
+.hero-zoom {
+  animation: hero-zoom 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.06);
+    opacity: 0.5;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
 
-/* Scroll-reveal system */
-.sa { transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1), clip-path 1s cubic-bezier(.7,0,.2,1), filter .8s; }
-.sa-up:not(.sa-in) { opacity: 0; transform: translateY(28px); }
-.sa-title:not(.sa-in) { opacity: 0; transform: translateY(40px) skewY(3deg); filter: blur(6px); }
-.sa-zoom:not(.sa-in) { opacity: 0; transform: scale(1.12); clip-path: inset(12% 0 12% 0); }
-.sa-zoom.sa-in { clip-path: inset(0 0 0 0); }
+/* Announcement ticker */
+.marquee-track {
+  animation: marquee 68s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
 
-/* Micro-interactions */
-main a, main button { transition: transform .25s ease, box-shadow .25s ease, background-color .25s, color .25s; }
-main a:active, main button:active { transform: scale(.97); }
-.btn-primary:hover, .btn-outline:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -12px color-mix(in oklab, var(--primary) 60%, transparent); }
-main section img { transition: transform .9s cubic-bezier(.2,.7,.2,1), opacity .8s, clip-path 1s cubic-bezier(.7,0,.2,1), filter .8s; }
-main a:hover img, main button:hover img { transform: scale(1.06); }
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { .sa { opacity: 1 !important; transform: none !important; clip-path: none !important; filter: none !important; } html { scroll-behavior: auto; } }
+/* Thin, arrowless scrollbar for panels such as the bag */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
+}
+
+/* Bag count badge */
+.bag-pop {
+  animation: bag-pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes bag-pop {
+  0% {
+    transform: scale(0.3);
+  }
+  60% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bag-pop {
+    animation: none;
+  }
+}
+
+/* Themed dropdowns via customizable <select> (Chromium 135+); other browsers keep their native picker. */
+@supports (appearance: base-select) {
+  select,
+  ::picker(select) {
+    appearance: base-select;
+  }
+  select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  select::picker-icon {
+    color: var(--muted-foreground);
+    transition: rotate 0.2s ease;
+  }
+  select:open::picker-icon {
+    rotate: 180deg;
+  }
+  ::picker(select) {
+    margin-block: 6px;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--background);
+    color: var(--foreground);
+    max-block-size: min(20rem, 55vh);
+    overflow-y: auto;
+    position-try-order: normal; /* open below the field; flip above only when it doesn't fit */
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
+    box-shadow: 0 18px 40px -18px color-mix(in oklab, var(--foreground) 40%, transparent);
+  }
+  option {
+    padding: 0.65rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition:
+      background-color 0.15s,
+      color 0.15s;
+  }
+  option::checkmark {
+    display: none;
+  }
+  option:hover,
+  option:focus-visible {
+    background: var(--secondary);
+    color: var(--primary);
+    outline: none;
+  }
+  option:checked {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  /* The "Select" placeholder stays as the button label but is not offered as a choice. */
+  option[value=""]:disabled {
+    display: none;
+  }
+}
+
+/* Reveal effects start scaled up; clip so they never push the page sideways on small screens.
+   `clip` (unlike `hidden`) keeps position: sticky working inside main. */
+main {
+  overflow-x: clip;
+}
+
+/* Button feedback: a gentle lift on hover and press-down on click. */
+.btn-primary,
+.btn-outline {
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.btn-primary:hover,
+.btn-outline:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px -14px color-mix(in oklab, var(--primary) 60%, transparent);
+}
+.btn-primary:active,
+.btn-outline:active {
+  transform: translateY(0) scale(0.98);
+}
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -10,33 +10,310 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as PaymentStatusRouteImport } from './routes/payment-status'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as ShopRouteImport } from './routes/shop'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as WholesaleRouteImport } from './routes/wholesale'
+import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as ApiRazorpayWebhookRouteImport } from './routes/api/razorpay-webhook'
+import { Route as CollectionsSlugRouteImport } from './routes/collections/$slug'
+import { Route as OrderOrderNumberRouteImport } from './routes/order/$orderNumber'
+import { Route as PoliciesPrivacyRouteImport } from './routes/policies/privacy'
+import { Route as PoliciesReturnsRouteImport } from './routes/policies/returns'
+import { Route as PoliciesShippingRouteImport } from './routes/policies/shipping'
+import { Route as PoliciesTermsRouteImport } from './routes/policies/terms'
+import { Route as ProductsSlugRouteImport } from './routes/products/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentStatusRoute = PaymentStatusRouteImport.update({
+  id: '/payment-status',
+  path: '/payment-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WholesaleRoute = WholesaleRouteImport.update({
+  id: '/wholesale',
+  path: '/wholesale',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRazorpayWebhookRoute = ApiRazorpayWebhookRouteImport.update({
+  id: '/api/razorpay-webhook',
+  path: '/api/razorpay-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
+  id: '/collections/$slug',
+  path: '/collections/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderOrderNumberRoute = OrderOrderNumberRouteImport.update({
+  id: '/order/$orderNumber',
+  path: '/order/$orderNumber',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesPrivacyRoute = PoliciesPrivacyRouteImport.update({
+  id: '/policies/privacy',
+  path: '/policies/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesReturnsRoute = PoliciesReturnsRouteImport.update({
+  id: '/policies/returns',
+  path: '/policies/returns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesShippingRoute = PoliciesShippingRouteImport.update({
+  id: '/policies/shipping',
+  path: '/policies/shipping',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesTermsRoute = PoliciesTermsRouteImport.update({
+  id: '/policies/terms',
+  path: '/policies/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/payment-status': typeof PaymentStatusRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
+  '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/wholesale': typeof WholesaleRoute
+  '/wishlist': typeof WishlistRoute
+  '/api/razorpay-webhook': typeof ApiRazorpayWebhookRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
+  '/order/$orderNumber': typeof OrderOrderNumberRoute
+  '/policies/privacy': typeof PoliciesPrivacyRoute
+  '/policies/returns': typeof PoliciesReturnsRoute
+  '/policies/shipping': typeof PoliciesShippingRoute
+  '/policies/terms': typeof PoliciesTermsRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/payment-status': typeof PaymentStatusRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
+  '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/wholesale': typeof WholesaleRoute
+  '/wishlist': typeof WishlistRoute
+  '/api/razorpay-webhook': typeof ApiRazorpayWebhookRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
+  '/order/$orderNumber': typeof OrderOrderNumberRoute
+  '/policies/privacy': typeof PoliciesPrivacyRoute
+  '/policies/returns': typeof PoliciesReturnsRoute
+  '/policies/shipping': typeof PoliciesShippingRoute
+  '/policies/terms': typeof PoliciesTermsRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/payment-status': typeof PaymentStatusRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
+  '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/wholesale': typeof WholesaleRoute
+  '/wishlist': typeof WishlistRoute
+  '/api/razorpay-webhook': typeof ApiRazorpayWebhookRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
+  '/order/$orderNumber': typeof OrderOrderNumberRoute
+  '/policies/privacy': typeof PoliciesPrivacyRoute
+  '/policies/returns': typeof PoliciesReturnsRoute
+  '/policies/shipping': typeof PoliciesShippingRoute
+  '/policies/terms': typeof PoliciesTermsRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/faq'
+    | '/payment-status'
+    | '/robots.txt'
+    | '/search'
+    | '/shop'
+    | '/sitemap.xml'
+    | '/wholesale'
+    | '/wishlist'
+    | '/api/razorpay-webhook'
+    | '/collections/$slug'
+    | '/order/$orderNumber'
+    | '/policies/privacy'
+    | '/policies/returns'
+    | '/policies/shipping'
+    | '/policies/terms'
+    | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/faq'
+    | '/payment-status'
+    | '/robots.txt'
+    | '/search'
+    | '/shop'
+    | '/sitemap.xml'
+    | '/wholesale'
+    | '/wishlist'
+    | '/api/razorpay-webhook'
+    | '/collections/$slug'
+    | '/order/$orderNumber'
+    | '/policies/privacy'
+    | '/policies/returns'
+    | '/policies/shipping'
+    | '/policies/terms'
+    | '/products/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/faq'
+    | '/payment-status'
+    | '/robots.txt'
+    | '/search'
+    | '/shop'
+    | '/sitemap.xml'
+    | '/wholesale'
+    | '/wishlist'
+    | '/api/razorpay-webhook'
+    | '/collections/$slug'
+    | '/order/$orderNumber'
+    | '/policies/privacy'
+    | '/policies/returns'
+    | '/policies/shipping'
+    | '/policies/terms'
+    | '/products/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRoute
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  PaymentStatusRoute: typeof PaymentStatusRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SearchRoute: typeof SearchRoute
+  ShopRoute: typeof ShopRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  WholesaleRoute: typeof WholesaleRoute
+  WishlistRoute: typeof WishlistRoute
+  ApiRazorpayWebhookRoute: typeof ApiRazorpayWebhookRoute
+  CollectionsSlugRoute: typeof CollectionsSlugRoute
+  OrderOrderNumberRoute: typeof OrderOrderNumberRoute
+  PoliciesPrivacyRoute: typeof PoliciesPrivacyRoute
+  PoliciesReturnsRoute: typeof PoliciesReturnsRoute
+  PoliciesShippingRoute: typeof PoliciesShippingRoute
+  PoliciesTermsRoute: typeof PoliciesTermsRoute
+  ProductsSlugRoute: typeof ProductsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +325,179 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-status': {
+      id: '/payment-status'
+      path: '/payment-status'
+      fullPath: '/payment-status'
+      preLoaderRoute: typeof PaymentStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wholesale': {
+      id: '/wholesale'
+      path: '/wholesale'
+      fullPath: '/wholesale'
+      preLoaderRoute: typeof WholesaleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/razorpay-webhook': {
+      id: '/api/razorpay-webhook'
+      path: '/api/razorpay-webhook'
+      fullPath: '/api/razorpay-webhook'
+      preLoaderRoute: typeof ApiRazorpayWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections/$slug': {
+      id: '/collections/$slug'
+      path: '/collections/$slug'
+      fullPath: '/collections/$slug'
+      preLoaderRoute: typeof CollectionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order/$orderNumber': {
+      id: '/order/$orderNumber'
+      path: '/order/$orderNumber'
+      fullPath: '/order/$orderNumber'
+      preLoaderRoute: typeof OrderOrderNumberRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies/privacy': {
+      id: '/policies/privacy'
+      path: '/policies/privacy'
+      fullPath: '/policies/privacy'
+      preLoaderRoute: typeof PoliciesPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies/returns': {
+      id: '/policies/returns'
+      path: '/policies/returns'
+      fullPath: '/policies/returns'
+      preLoaderRoute: typeof PoliciesReturnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies/shipping': {
+      id: '/policies/shipping'
+      path: '/policies/shipping'
+      fullPath: '/policies/shipping'
+      preLoaderRoute: typeof PoliciesShippingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies/terms': {
+      id: '/policies/terms'
+      path: '/policies/terms'
+      fullPath: '/policies/terms'
+      preLoaderRoute: typeof PoliciesTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AdminRoute: AdminRoute,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  PaymentStatusRoute: PaymentStatusRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SearchRoute: SearchRoute,
+  ShopRoute: ShopRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  WholesaleRoute: WholesaleRoute,
+  WishlistRoute: WishlistRoute,
+  ApiRazorpayWebhookRoute: ApiRazorpayWebhookRoute,
+  CollectionsSlugRoute: CollectionsSlugRoute,
+  OrderOrderNumberRoute: OrderOrderNumberRoute,
+  PoliciesPrivacyRoute: PoliciesPrivacyRoute,
+  PoliciesReturnsRoute: PoliciesReturnsRoute,
+  PoliciesShippingRoute: PoliciesShippingRoute,
+  PoliciesTermsRoute: PoliciesTermsRoute,
+  ProductsSlugRoute: ProductsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
